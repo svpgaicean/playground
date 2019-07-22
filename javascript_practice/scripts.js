@@ -8,80 +8,80 @@ let nameValid = (str) => /^[a-zA-Z]*$/i.test(str);
 let inputValid = (str) => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(str);
 let submitButton = document.getElementById('checkout');
 let quantity = document.querySelectorAll('.quantity');
-let v = [0, 0, 0];
+let v = new Object();
+let e = new Object();
 
-document.getElementById("firstName").addEventListener("blur", function(event) {
-    var value = document.getElementById("firstName").value;
-    try {
-        if(nameValid(value) == 0) throw "Input should contain only letters.";
-    }
-    catch(err) {
-        document.getElementById("firstName").setAttribute("style", "border: 1px solid red;");
-    }
-    finally {
-        if(nameValid(value) == 1) {
-            document.getElementById("firstName").setAttribute("style", "border: 1px solid #777777;");
-            v[0] = 1;
-            hideError();
+function elementValid (elem_name) {
+    document.getElementById(elem_name).addEventListener("blur", function(event) {
+        let value = document.getElementById(elem_name).value;
+        try {
+            if (nameValid(value) == 0) throw "invalid_input";
         }
-        else {
-            v[0] = 0;
-            showError();
+        catch(err) {
+            document.getElementById(elem_name).setAttribute("style", "border: 1px solid red;");
         }
-        validateForm(v);
-    }
-});
-
-document.getElementById("lastName").addEventListener("blur", function(event) {
-    var value = document.getElementById("lastName").value;
-    try {
-        if(nameValid(value) == 0) throw "Input should contain only letters.";
-    }
-    catch(err) {
-        document.getElementById("lastName").setAttribute("style", "border: 1px solid red;");
-    }
-    finally {
-        if(nameValid(value) == 1) {
-            document.getElementById("lastName").setAttribute("style", "border: 1px solid #777777;");
-            v[1] = 1;
-            hideError();
-        }            
-        else {
-            v[1] = 0;
-            showError();
+        finally {
+            if( (elem_name === "firstName" || elem_name === "lastName") && nameValid(value) == 1) {
+                document.getElementById(elem_name).setAttribute("style", "border: 1px solid #777777;");
+                v[`${elem_name}`] = 0;
+                e[`${elem_name}`] = 0;
+            }
+            else if ( elem_name === "email" && inputValid(value) == 1 ){
+                document.getElementById(elem_name).setAttribute("style", "border: 1px solid #777777;");
+                v[`${elem_name}`] = 0;
+                e[`${elem_name}`] = 0;
+            }
+            else {
+                v[`${elem_name}`] = 1;
+                e[`${elem_name}`] = 1;
+            }
+            validateForm(v);
+            showError(e);
         }
-        validateForm(v);
-    }
-});
-
-document.getElementById("email").addEventListener("blur", function(event) {
-    var value = document.getElementById("email").value;
-    try {
-        if(inputValid(value) == 0) throw "Input should be a valid email address.";
-    }
-    catch(err) {
-        document.getElementById("email").setAttribute("style", "border: 1px solid red;");
-    }
-    finally {
-        if(inputValid(value) == 1) {
-            document.getElementById("email").setAttribute("style", "border: 1px solid #777777;");
-            v[2] = 1;
-            hideError();
-        }
-        else {
-            v[2] = 0;
-            showError();
-        }
-        validateForm(v);
-    }
-});
-
-function showError() {
-    document.getElementById('err').hidden = false;
+    });
 }
 
-function hideError() {
-    document.getElementById('err').hidden = true;
+elementValid("firstName");
+elementValid("lastName");
+elementValid("email");
+
+function validateForm (v) {
+    let vals = Object.values(v);
+    if (vals instanceof Array) {
+        let sum = vals.reduce((acc, val) => {return acc + val });
+        if (sum === 0) {
+            submitButton.disabled = false;
+            return 0;
+        }
+        else {
+            submitButton.disabled = true;
+            return 0;
+        }
+    }
+    else {
+        return 1;
+    }
+}
+
+function showError (e) {
+    let vals = Object.values(e);
+    if (vals instanceof Array) {
+        let verdict = 0;
+        for (let i = 0; i < vals.length; i++){
+            if (vals[i] === 1) verdict = 1;
+        }
+        if (verdict == 1) {
+            document.getElementById('err').hidden = false;
+            return 0;
+        }
+        else {
+            document.getElementById('err').hidden = true;
+            return 0;
+        }
+    }
+    else {
+        return 1;
+    }
 }
 
 let removeCartItemButtons = document.getElementsByClassName('remove-item');
@@ -131,19 +131,4 @@ for (let i = 0; i < addItemButtons.length; i++) {
         quantity[i].innerText = quant + 1;
         updateCartTotal();
     });
-}
-
-function validateForm (array) {
-    if (array instanceof Array) {
-        let sum = array.reduce((acc, val) => {return acc + val });
-        if (sum === 3) {
-            submitButton.disabled = false;
-        }
-        else {
-            submitButton.disabled = true;
-        }
-    }
-    else {
-        return 0;
-    }
 }
