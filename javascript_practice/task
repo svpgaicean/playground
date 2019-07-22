@@ -1,0 +1,9 @@
+Tasks:
+1. Don't allow the form to be submitted unless is valid.
+2. Validate form fields: required fields must have letters and space only [a-zA-Z ].
+	2.1 When an error is occured, show it above the form.
+	2.2 When an error is occured, highlight the form input (with red color).
+3. When the form is valid, the submit button must be enabled.
+4. Allow the user to change the quantity of a product. (Quantity can't be lower than 1)
+5. Update the price when the quantity is changed.
+6. Allow the user to remove an product from the table. (When this happens, the total price should be updated).
