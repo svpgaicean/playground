@@ -1,8 +1,26 @@
 let button = document.getElementById('btn');
+let img = document.getElementById('img');
+let button2 = document.getElementById('btn2');
 
-function eventHandler(event) {
-    let img = document.getElementById('img');
-    img.hidden = false;
+function showImage() {
+    if (document.getElementById('img') != null) {
+        img.hidden = false;
+        img.addEventListener('click', hideImage);
+    }
+    else {
+        alert('Image was removed from DOM.');
+    }
 }
 
-button.addEventListener('click', eventHandler);
+function hideImage() {
+    img.hidden = true;
+}
+
+function removeBtn() {
+    img.remove();
+    img.removeEventListener('click', hideImage);
+}
+
+button.addEventListener('click', showImage); 
+button2.addEventListener('click', removeBtn);
+img.addEventListener('click', hideImage);
