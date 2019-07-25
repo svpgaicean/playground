@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Week 2 - Day 3</title></head>
+    <script>
+        const getFirstUserData = async () => {
+            const response = await
+        fetch('https://my-json-server.typicode.com/typicode/demo/comments')
+            // get comments list
+            const comments = await response.json() // parse json
+            const comment = comments[0] // pick first comments
+            const comment_data = await
+        fetch(`https://my-json-server.typicode.com/typicode/demo/comments/${comment.id}`) //get comment data
+            const comment_resp = await comment_data.json() // parse json
+            return comment_resp;
+            console.log(comment_resp);
+        }
+        getFirstUserData();
+    </script>
+</html>
