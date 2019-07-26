@@ -1,0 +1,10 @@
+* {
+    list-style: none;
+    color: #ffff00;
+    font-style: bold;
+    font-size: 26px;
+}
+
+body {
+    background: #000;
+}
