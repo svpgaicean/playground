@@ -26,5 +26,13 @@ async function getMovies() {
         return elem.title;
     })
     // console.log(moviesTitles);
-    return moviesTitles;
+    const parent = document.getElementById('movie_titles');
+    for (let i = 0; i < moviesTitles.length; i++) {
+        const node = document.createElement('li');
+        const textnode = document.createTextNode(`${moviesTitles[i]}`);
+        node.appendChild(textnode);
+        parent.appendChild(node);
+    }
 }
+
+getMovies();
